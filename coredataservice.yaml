@@ -1,1 +1,4908 @@
-
+---
+openapi: 3.0.2
+info:
+  title: CCA Core DataService API
+  version: 1.210.6
+  description: The Coredataservice provides OMDS compatible ways to interact with
+    cca environments.
+  contact:
+    name: API Team
+    url: http://www.ccaedv.at
+    email: apiteam@ccaedv.at
+servers:
+- url: https://ccaonline-test.ccaedv.at:443/CCAOnline-API-Demo/coredataservice/api/v1.210.3/
+paths:
+  /antraege:
+    post:
+      requestBody:
+        content:
+          application/json+vnd.offerToApplication:
+            schema:
+              $ref: '#/components/schemas/OfferToApplicationModel'
+        required: true
+      tags:
+      - Antrag
+      - Offert
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferToApplicationResultModel'
+          description: Success
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unprocessable Entity
+      operationId: CreateApplicationFromOffer
+      summary: Transforms an offer to an application.
+  /dokumente:
+    get:
+      tags:
+      - Dokumente
+      parameters:
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumentResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokumente with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getDokumente
+      summary: Gets a List of Dokumente
+  /dokumente/{dokId}:
+    get:
+      tags:
+      - Dokumente
+      parameters:
+      - name: dokId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumentViewModel'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokument with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getDokument
+      summary: Gets a Dokument per Id
+  /dokumente/{dokId}/unterschreiben/{perId}:
+    get:
+      tags:
+      - Dokumente
+      parameters:
+      - name: dokId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumentUnterschreibenStatusResult'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokument with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getUnterschreibenStatus
+      summary: gets the sign state of referred document
+    post:
+      tags:
+      - Dokumente
+      parameters:
+      - name: dokId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokument with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: signDokument
+      summary: Provides a document for a endcustomer to sign
+  /dokumente/{dokId}/content:
+    get:
+      tags:
+      - Dokumente
+      parameters:
+      - name: dokId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokument with passed parameters.
+        "500":
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: downloadDokument
+      summary: Downloads a document per dokId
+  /kfzRisiken:
+    get:
+      tags:
+      - KFZRisiken
+      parameters:
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KFZResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find KFZRisiken with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getKFZRisiken
+      summary: Gets a List of KFZRisiken
+  /kfzRisiken/{kfzRisikoId}:
+    get:
+      tags:
+      - KFZRisiken
+      parameters:
+      - name: kfzRisikoId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KFZViewModel'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find KFZRisiko with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getKFZRisiko
+      summary: Gets a KFZRisiko per Id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KFZEditModel'
+        required: true
+      tags:
+      - KFZRisiken
+      parameters:
+      - name: kfzRisikoId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find KFZRisiko with passed parameters.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not edit KFZRisiko with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editKFZRisiko
+      summary: Edits a KFZRisiko per Id
+  /sachRisiken:
+    get:
+      tags:
+      - Sachrisiken
+      parameters:
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachrisikoResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Sachrisiken with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getSachrisiken
+      summary: Liste von Sachrisiken
+  /sachRisiken/{sachRisikoId}:
+    get:
+      tags:
+      - Sachrisiken
+      parameters:
+      - name: sachRisikoId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachrisikoViewModel'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Sachrisiko with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getSachrisiko
+      summary: Gets a Sachrisiko per Id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachrisikoEditModel'
+        required: true
+      tags:
+      - Sachrisiken
+      parameters:
+      - name: sachRisikoId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Sachrisiko with passed parameters.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not edit Sachrisiko with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editSachrisiko
+      summary: Edits a Sachrisiko per Id
+  /personen:
+    get:
+      tags:
+      - Person
+      parameters:
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersons
+      summary: Gets a List of Persons
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonCreateModel'
+        required: true
+      tags:
+      - Person
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created person.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createPerson
+      summary: Creates a Person
+  /personen/{perId}:
+    get:
+      tags:
+      - Person
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonViewModel'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPerson
+      summary: Gets an Person per Id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonEditModel'
+        required: true
+      tags:
+      - Person
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not edit Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editPerson
+      summary: Edits an Person per Id
+  /personen/{perId}/adressen:
+    get:
+      tags:
+      - Adresse
+      - Person
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdresseResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonAddressen
+      summary: "Gets addresses of a Person with Id {perId}."
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdresseCreateModel'
+        required: true
+      tags:
+      - Person
+      - Adresse
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created Adresse.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Adresse with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+        "501":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Adresse because of Configuration issues.
+      operationId: createPersonAdresse
+      summary: Creates an Adresse
+  /personen/{perId}/adressen/{adrId}:
+    get:
+      tags:
+      - Person
+      - Adresse
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: adrId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdresseViewModel'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User is not allowed to delete Adresse.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonAdresse
+      summary: "Gets Adresse {adrId} of Person {perId}"
+    delete:
+      tags:
+      - Person
+      - Adresse
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: adrId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User is not allowed to delete Adresse.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: deletePersonAdresse
+      summary: "Delete Adresse {adrId} of Person {perId}"
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdresseEditModel'
+        required: true
+      tags:
+      - Person
+      - Adresse
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: adrId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Adresse with passed parameters.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not edit Adresse with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: EditPersonAdresse
+      summary: Edits an Adresse of a person
+  /personen/{perId}/bankkonten/:
+    get:
+      tags:
+      - Person
+      - Bankkonto
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankkontoResultPage'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getBankkonten
+      summary: "Lists all active Bankkonten associated with a Person {perId}"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankkontoCreateModel'
+        required: true
+      tags:
+      - Person
+      - Bankkonto
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            '*/*':
+              schema:
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created bankkonto.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unprocessable Entity (IBAN not valid or No Bank for BIC).
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: addBankkonto
+      summary: Adds a Bankkonto to the given person.
+      description: "Only accounts with a valid IBAN are accepted. If the BIC (Swift)\
+        \ code is present, and exactly one bank is identified by that code, the bank\
+        \ is associated with the account."
+  /personen/{perId}/bankkonten/{bankkontoId}:
+    get:
+      tags:
+      - Person
+      - Bankkonto
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: bankkontoId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankkontoViewModel'
+          description: Created
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: NotFound - The person or bankkonto could not be found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getBankkonto
+      summary: Retrieves a bankkonto
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankkontoEditModel'
+        required: true
+      tags:
+      - Person
+      - Bankkonto
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: bankkontoId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          description: Created
+        "422":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unprocessable Entity (IBAN not valid or No Bank for BIC)
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: patchBankkonto
+      summary: Modifies a Bankkonto to the given person.
+      description: Only accounts with a valid IBAN are accepted. The BIC (Swift) must
+        exactly match one bank in the cca instance. The bank is associated with the
+        account. **Attention** Changing a bank account usually means that workflows
+        need to be taken into account (i.e. informing insurance companies). Those
+        Workflows are **not** triggered by this operation.
+  /personen/{perId}/dokumente:
+    get:
+      tags:
+      - Person
+      - Dokumente
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumentResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokumente with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getDokumenteForPerson
+      summary: "Gets a List of Dokumente of Person {perId}"
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/createDokumentToPerson'
+      tags:
+      - Person
+      - Dokumente
+      parameters:
+      - name: perId
+        description: The Persons Id
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created Dokument.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Dokument with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createDokumentToPerson
+      summary: "Creates a Dokument to Person {perId}."
+  /personen/{perId}/kfzRisiken:
+    get:
+      tags:
+      - Person
+      - KFZRisiken
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KFZResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find KFZRisiken with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getKFZRisikenForPerson
+      summary: "Gets a List of KFZRisiken of Person {perId}."
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/KFZCreateModel'
+      tags:
+      - Person
+      - KFZRisiken
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created KFZ.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create KFZ with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createKFZtoPerson
+      summary: "Creates a KFZ to Person {perId}"
+  /personen/{perId}/sachRisiken:
+    get:
+      tags:
+      - Person
+      - Sachrisiken
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachrisikoResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Sachrisiken with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getSachrisikenToPerson
+      summary: "Liste von Sachrisiken von Person {perId}"
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/SachrisikoCreateModel'
+      tags:
+      - Person
+      - Sachrisiken
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created NKP.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create NKP with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createSachrisikoforPerson
+      summary: "Creates a NKP risiko for a Person {perId}"
+  /personen/{perId}/vertraege:
+    get:
+      tags:
+      - Person
+      - Vertrag
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VertragResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonVertraege
+      summary: "Gets Vertraege of a Person with Id {perId}"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VertragCreateModel'
+        required: true
+      tags:
+      - Person
+      - Vertrag
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created Vertrag.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Vertrag with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+        "501":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Antrag because of Configuration issues.
+      operationId: createVertrag
+      summary: Legt einen Vertrag zu einer Person an.
+      description: "Die Person wird als Versicherungsnehmer des Vertrags angelegt.\
+        \ \n"
+  /personen/{perId}/antraege:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AntragCreateModel'
+        required: true
+      tags:
+      - Person
+      - Vertrag
+      - Antrag
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created Vertrag.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Antrag with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+        "501":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Antrag because of Configuration issues.
+      operationId: createAntrag
+      summary: Creates an Antrag with Sparte
+  /personen/{perId}/offerte:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OffertCreateModel'
+        required: true
+      tags:
+      - Person
+      - Vertrag
+      - Offert
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created Offert.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Offert with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+        "501":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Offert because of Configuration issues.
+      operationId: createOffert
+      summary: Creates an Offert with Sparte
+  /personen/{perId}/beziehungen:
+    get:
+      tags:
+      - Person
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonBeziehungResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonConnections
+      summary: "Gets a List of Connections of Person {perId}"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonBeziehungCreateModel'
+        required: true
+      tags:
+      - Person
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create connection between Persons with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createPersonConnection
+      summary: "Creates a connection between {perId} and {perId2}"
+  /personen/{perId}/beziehungen/{bezId}:
+    delete:
+      tags:
+      - Person
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: bezId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User is not allowed to delete Connection.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Person with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: deletePersonConnection
+      summary: Removes a relationship
+  /vertraege:
+    get:
+      tags:
+      - Vertrag
+      parameters:
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VertragResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Vertrag with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getVertraege
+      summary: Gets a List of Vertraege
+  /vertraege/{verId}:
+    get:
+      tags:
+      - Vertrag
+      - Antrag
+      - Offert
+      parameters:
+      - name: verId
+        description: The Vertrags id
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VertragViewModel'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: "Vertrag with Id {verId} not found."
+      operationId: getVertrag
+      summary: Get Vertrag By Id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VertragEditModel'
+        required: true
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Vertrag with passed parameters.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not edit Vertrag with passed parameters; Could not open
+            Vertrag; Could not close Vertrag;
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editVertrag
+      summary: Edits a Vertrag per Id
+  /vertraege/{verId}/personRisiken:
+    get:
+      tags:
+      - Vertrag
+      - Personrisiken
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonRisikoResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find contract.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonRisikenForVertrag
+      summary: "Gets a List of PersonRisiken of Vertrag {verId}"
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/ExistingRiskObject'
+      tags:
+      - Vertrag
+      - Personrisiken
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created KFZ.
+                    type: integer
+          description: Created
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: "The Contract does not exist, or is not visible to the editor."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The KFZ risk could not be linked. (KFZ Risk might not exist)
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: linkPersonRiskToContract
+      summary: Links an existing Person to a contract as a risk
+  /vertraege/{verId}/personRisiken/{perId}:
+    delete:
+      tags:
+      - Vertrag
+      - Personrisiken
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: "The Contract does not exist, or is not visible to the editor."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The risk could not be unlinked. (Risk might not exist)
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: unlinkPersonRiskFromContract
+      summary: removes a VersichertePerson Relationship between a contract and a person.
+  /vertraege/{verId}/kfzRisiken:
+    get:
+      tags:
+      - Vertrag
+      - KFZRisiken
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KFZResultPage'
+            application/vnd.kfzContractRelation+json:
+              schema:
+                $ref: '#/components/schemas/KFZRisikoResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find KFZRisiken with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getKFZRisikenToVertrag
+      summary: "Gets a List of KFZRisiken of Vertrag {verId}"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KFZCreateModel'
+      tags:
+      - Vertrag
+      - KFZRisiken
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created KFZ.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create KFZ with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createKFZtoVertrag
+      summary: "Creates a KFZ to Vertrag {verId}"
+  /vertraege/{verId}/kfzRisiken/{kfzId}:
+    delete:
+      tags:
+      - Vertrag
+      - KFZRisiken
+      parameters:
+      - name: kfzId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: "The Contract does not exist, or is not visible to the editor."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The risk could not be unlinked. (Risk might not exist)
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: unlinkKFZRiskFromContract
+      summary: removes the relationship between a contract and a kfz.
+  /vertraege/{verId}/sachRisiken:
+    get:
+      tags:
+      - Vertrag
+      - Sachrisiken
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachrisikoResultPage'
+            application/vnd.nkpContractRelation+json:
+              schema:
+                $ref: '#/components/schemas/SachRisikoResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Sachrisiken with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getSachrisikenToVertrag
+      summary: "Liste von Sachrisiken von Vertrag {verId}"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachrisikoCreateModel'
+          application/json+vnd.existingRiskObject:
+            schema:
+              $ref: '#/components/schemas/ExistingRiskObject'
+        required: true
+      tags:
+      - Vertrag
+      - Sachrisiken
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created NKP.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create NKP with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createNKPtoVertrag
+      summary: "Creates a NKP to Vertrag {verId}"
+  /vertraege/{verId}/sachRisiken/{nkpId}:
+    delete:
+      tags:
+      - Vertrag
+      - Sachrisiken
+      parameters:
+      - name: nkpId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: "The Contract does not exist, or is not visible to the editor."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The risk could not be unlinked. (Risk might not exist)
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: unlinkNKPZRiskFromContract
+      summary: removes the relationship between a contract and a Sachrisiko.
+  /vertraege/{verId}/close:
+    post:
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not close Vertrag.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      deprecated: true
+      operationId: closeBook
+      summary: "Closed the Book of Vertrag {verId}."
+  /vertraege/{verId}/open:
+    post:
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "403":
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not open Vertrag.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      deprecated: true
+      operationId: openBook
+      summary: "Open the Book of Vertrag {verId}."
+  /vertraege/{verId}/buch:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VertragBuchEditModel'
+        required: true
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Vertrag with passed parameters.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not edit Vertrag with passed parameters; Could not open
+            Vertrag; Could not close Vertrag;
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editVertragBuch
+      summary: Set a Vertrag either to open or closed.
+  /vertraege/{verId}/xml:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - xml
+              type: object
+              properties:
+                xml:
+                  format: xml
+                  type: string
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "403":
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not open Vertrag.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: setVertragXml
+      summary: "Sets the XML of Vertrag {verId}."
+  /vertraege/{verId}/dokumente:
+    get:
+      tags:
+      - Vertrag
+      - Dokumente
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumentResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find Dokumente with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getDokumenteForVertrag
+      summary: "Gets a List of Dokumente of Vertrag {verId}."
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/createDokumentToPerson'
+      tags:
+      - Vertrag
+      - Dokumente
+      parameters:
+      - name: verId
+        description: The contracts id.
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created Dokument.
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create Dokument with passed parameters.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createDokumentToVertrag
+      summary: "Creates a Dokument to Vertrag {verId}."
+  /vertraege/{verId}/vertragsparten:
+    get:
+      tags:
+      - Vertrag
+      parameters:
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VertragSparteResultPage'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not find VSPs with passed parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getVSP
+      summary: "Gets a List of VSPs of Vertrag {verId}"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VertragSparteCreateModel'
+        required: true
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    format: int32
+                    description: The id of the created VSP
+                    type: integer
+          description: Created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not create VSP with passed parameters
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: createVSPToVertrag
+      summary: "Creates a VSP to Vertrag {verId}"
+  /vertraege/{verId}/vertragsparten/{vspId}:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VertragSparteEditModel'
+        required: true
+      tags:
+      - Vertrag
+      - VertragSparte
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: vspId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: Success
+        "404":
+          description: Resource not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: UpdateVertragSparte
+      summary: "Edit existing Vertragsparte, currently only jnpVsuBerechnungsArt Deaktivert\
+        \ is supported"
+  /vertraege/{verId}/vertragsparten/{vspId}/leistungszeilen:
+    get:
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: vspId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - $ref: '#/components/parameters/pagingPerPageParam'
+      - $ref: '#/components/parameters/pagingPageNumberParam'
+      - $ref: '#/components/parameters/orderByParam'
+      - $ref: '#/components/parameters/filterByPropertiesParam'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeistungszeileResultPage'
+          description: Success
+        "404":
+          description: Resource not found
+      operationId: getLz
+      summary: "Get Leistungszeilen of Vertragssparte {spId} for Vertrag {verId}"
+  /vertraege/{verId}/leistungszeilen/{lzId}:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/LeistungszeileModel'
+        required: true
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      - name: lzId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "403":
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not open Vertrag
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editLZ
+      summary: "Edit Leistungszeile {lzId} of Vertragssparte {spId} for Vertrag {verId}"
+  /vertraege/{verId}/zusatzdaten:
+    get:
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZusatzdatenModel'
+          description: Success
+        "403":
+          description: Forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getVertragZusatzdaten
+      summary: "Retrieves Zusatzdaten for the selected Vertrag {verId}"
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ZusatzdatenModel'
+        required: true
+      tags:
+      - Vertrag
+      parameters:
+      - name: verId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: Success
+        "403":
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Could not set Zusatzdaten
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: editZusatzdaten
+      summary: "Edits the additional datafields for Vertrag {verId}. The data is an\
+        \ update - setting values for additional datafields: \n  **sets** the data\
+        \ if it was not set before\n  **replaces** the data if it was already set\n\
+        \  **removes** the current value if the value is `null`\nAll additional datafields\
+        \ that are not part of the patch request are ignored.\n"
+  /configuration/auswahllisten/{tabellenName}:
+    get:
+      tags:
+      - Konfiguration
+      parameters:
+      - name: tabellenName
+        schema:
+          enum:
+          - Beruf
+          - TitelAkademisch
+          - TitelBeruf
+          - TitleNachgestellt
+          - KfzMarke
+          type: string
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuswahllistenModel'
+          description: Success
+        "404":
+          description: Not found
+      operationId: getAuswahllisten
+      summary: Retrieves selection list items for the specified table
+  /configuration/omdsMappings/{schluesselArt}:
+    get:
+      tags:
+      - Konfiguration
+      parameters:
+      - name: schluesselArt
+        schema:
+          enum:
+          - DokumentType
+          - FamilienstandCd
+          - FzgArtCd
+          - GeschlechtCd
+          - KomArtCd
+          - LandesCd
+          - SonstPersArtCd
+          - VersSacheCd
+          - VerwendzweckCd
+          - VtgSparteCd
+          - VtgStatusCd
+          - VuVerbandNr
+          - WaehrungsCd
+          - ZahlRhythmCd
+          - ZahlWegCd
+          type: string
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OmdsMappingModel'
+          description: Success
+        "404":
+          description: Not found
+      operationId: getOmdsMappings
+      summary: Retrieves the mapped OMDS values for a given OMDS SchluesselArt
+  /configuration/orte:
+    get:
+      tags:
+      - Konfiguration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrtElement'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getOrte
+      summary: "Produces the list of configured [Ort](#/definitions/Ort)"
+  /configuration/vus/{vuId}/niederlassungen:
+    get:
+      tags:
+      - Konfiguration
+      - Niederlassung
+      parameters:
+      - name: vuId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NiederlassungViewModel'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getNiederlassungen
+      summary: Produces the list of Niederlassungen
+  /configuration/personBeziehungsarten:
+    get:
+      tags:
+      - Konfiguration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonBeziehungsart'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonBeziehungsarten
+      summary: "Produces the list of configured [PersonBeziehungsart](#/definitions/PersonBeziehungsart)"
+  /personBeziehungsarten:
+    get:
+      tags:
+      - Konfiguration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonBeziehungsart'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: getPersonBeziehungsartenOld
+      summary: Gets a List of PersonBeziehungsarten
+  /search:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequestModel'
+        required: true
+      tags:
+      - Volltextsuche
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResponseModel'
+          description: Success
+        "400":
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      operationId: search
+      summary: Performs a fulltext search
+  /endkundenportal/logins/{perId}:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndkundenPortalLogin'
+        required: true
+      tags:
+      - Endkundenportal
+      parameters:
+      - name: perId
+        schema:
+          format: int32
+          type: integer
+        in: path
+        required: true
+      responses:
+        "204":
+          description: NoContent
+        "401":
+          description: Wenn die übergebenen parameter nicht korrekt sind.
+        "403":
+          description: Forbidden
+        "404":
+          description: Wenn die Person nicht gefunden wurde
+      operationId: SetEndkundenPortalLogin
+      summary: Setzt die Endkundnenportal Login Daten zu einer person
+components:
+  schemas:
+    AdresseModel:
+      properties:
+        landesCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/LandesCode
+        plz:
+          description: PLZ of the address
+          type: string
+          x-cca-property-hint: ort.PLZ
+          x-omds2-property: PLZ
+        ort:
+          description: Ort of the address
+          type: string
+          x-cca-property-hint: ort.Name
+          x-omds2-property: Ort
+        strasse:
+          description: Strasse of the address
+          type: string
+          x-cca-property-hint: adrStrasse
+          x-omds2-property: Strasse
+    AdresseCreateModel:
+      allOf:
+      - $ref: '#/components/schemas/AdresseModel'
+    AdresseEditModel:
+      allOf:
+      - $ref: '#/components/schemas/AdresseModel'
+    AdresseViewModel:
+      allOf:
+      - $ref: '#/components/schemas/AdresseModel'
+      properties:
+        id:
+          format: int32
+          description: Id of the address
+          type: integer
+          x-cca-property-hint: adrID
+    BankkontoBic:
+      format: iso9362
+      description: ISO 9362 standard format of Business Identifier Codes
+      pattern: "^[a-z]{6}[2-9a-z][0-9a-np-z]([a-z0-9]{3}|x{3})?$"
+      type: string
+      x-cca-property-hint: bankkBIC
+    BankkontoIban:
+      format: iban
+      description: International bank account number
+      pattern: "^\\w{2}\\d{2}\\s?([0-9a-zA-Z]{4}\\s?){4}[0-9a-zA-Z]{2}$"
+      type: string
+      x-cca-property-hint: bankkIBAN
+    BankkontoCreateModel:
+      required:
+      - iban
+      - bic
+      type: object
+      properties:
+        bic:
+          $ref: '#/components/schemas/BankkontoBic'
+        iban:
+          $ref: '#/components/schemas/BankkontoIban'
+        kontoInhaber:
+          description: The holder fo the bankaccount
+          type: string
+          x-cca-property-hint: bankkKontoName
+        kontoInfo:
+          description: Additional Information the the account
+          type: string
+          x-cca-property-hint: bankkInfo
+    BankkontoViewModel:
+      required:
+      - id
+      - iban
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Id of the bankaccount
+          type: integer
+          x-cca-property-hint: bankkID
+          x-cca-extension: true
+        bic:
+          $ref: '#/components/schemas/BankkontoBic'
+        iban:
+          $ref: '#/components/schemas/BankkontoIban'
+        kontoInhaber:
+          description: The holder fo the bankaccount
+          type: string
+          x-cca-property-hint: bankkKontoName
+        kontoInfo:
+          description: Additional Information the the account
+          type: string
+          x-cca-property-hint: bankkInfo
+    BankkontoEditModel:
+      required:
+      - iban
+      - bic
+      type: object
+      properties:
+        bic:
+          $ref: '#/components/schemas/BankkontoBic'
+        iban:
+          $ref: '#/components/schemas/BankkontoIban'
+        kontoinhaber:
+          description: The holder of the bankaccount
+          type: string
+          x-cca-property-hint: bankkKontoName
+        kontoInfo:
+          description: Additional Information the the account
+          type: string
+          x-cca-property-hint: bankkInfo
+    OrtElement:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+          x-cca-property-hint: ortId
+        name:
+          type: string
+          x-cca-property-hint: ortName
+        plz:
+          type: string
+          x-cca-property-hint: ortPLZ
+        landesCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/LandesCode
+    PersonBeziehungsart:
+      description: "Personbeziehungen sind gerichtete Kanten zwischen zwei Personen.\
+        \ Die PersonBeziehungsart beschreibt die Natur dieser Beziehung.Sofern eine\
+        \ Umkehrbeziehung existiert, ist diese die gegenläufige Kante zur ursprünglichen\
+        \ Personbeziehung."
+      type: object
+      properties:
+        beziehungsartCode:
+          $ref: '#/components/schemas/PersonBeziehungsArtCode'
+        name:
+          description: Human readable identifier for the relationship
+          type: string
+        umkehrbeziehungArt:
+          description: "The inverse relation to the original relation, if one exists."
+          type: object
+          properties:
+            beziehungsartCode:
+              $ref: '#/components/schemas/PersonBeziehungsArtCode'
+            name:
+              description: Human readable identifier for the relationship
+              type: string
+    PersonBeziehungCreateModel:
+      description: Createmodel for PersonRelationship
+      required:
+      - beziehungsartCode
+      - personId
+      properties:
+        beziehungsartCode:
+          $ref: '#/components/schemas/PersonBeziehungsArtCode'
+        personId:
+          format: int32
+          description: The related personId
+          type: integer
+    PersonBeziehung:
+      description: Personbeziehungen sind gerichtete Kanten zwischen zwei Personen.
+        PersonA ist der Startknoten dieser gerichteten Kante und PersonB der Endknoten.
+      type: object
+      properties:
+        id:
+          format: int32
+          description: The identifier for this specific connection
+          type: integer
+          x-cca-property-hint: pervId
+        personAId:
+          format: int32
+          description: Die Id der Person von dem die Beziehung ausgeht (Der Startknoten
+            der gerichteten Kante)
+          type: integer
+          x-cca-property-hint: pervPersonID
+        personBId:
+          format: int32
+          description: Die Id der Person auf den die Beziehung zeigt (Der Endknoten
+            der gerichteten Kante)
+          type: integer
+          x-cca-property-hint: pervFremdID
+        beziehungsArt:
+          $ref: '#/components/schemas/PersonBeziehungsart'
+    NatuerlichePersonModel:
+      required:
+      - name
+      - geschlechtCode
+      type: object
+      properties:
+        name:
+          description: Familyname
+          type: string
+          x-cca-property-hint: perName1
+          x-omds2-property: Familienname
+        vorname:
+          description: First name
+          type: string
+          x-cca-property-hint: perName2
+          x-omds2-property: Vorname
+        geschlechtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GeschlechtCode
+        geburtsDatum:
+          format: date
+          description: Birthday of the Person
+          type: string
+          x-cca-property-hint: perGebDat
+          x-omds2-property: GebDat
+        staatsbuergerschaft:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/LandesCode
+          x-cca-property-hint: perStaatbuergerchaft_Land.lndMDSCode
+        familienstand:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/FamilienstandCode
+        titelBeruf:
+          description: The persons job title.
+          type: string
+          x-cca-property-hint: perTitelBerufId
+          x-cca-extension: true
+        beruf:
+          description: The persons job
+          type: string
+          x-cca-property-hint: perBerufId
+          x-cca-extension: true
+        titel:
+          description: The persons title
+          type: string
+          x-cca-property-hint: perTitelAkademischId
+          x-cca-extension: true
+        titelNachgestellt:
+          description: The persons title
+          type: string
+          x-cca-property-hint: perTitelNachgestelltId
+          x-cca-extension: true
+    SonstigePersonModel:
+      required:
+      - name
+      - sonstigePersonArt
+      type: object
+      properties:
+        name:
+          description: Name of the entity
+          type: string
+          x-cca-property-hint: perName1
+          x-omds2-property: Name
+        kurzname:
+          description: Shortname of the company
+          type: string
+          x-cca-property-hint: perName2
+          x-omds2-property: Kurzname
+        sonstigePersonArt:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/SonstigePersonArtCode
+    Identifizierung:
+      type: object
+      properties:
+        identifizierungsArtCode:
+          enum:
+          - Firmenbuchnummer
+          - Sozialversicherungsnummer
+          type: string
+          x-omds2-property: IdfArtCd_Type
+        schluessel:
+          description: 4 characters long Sozialversicherungsnummer or Firmenbuchnummer
+          type: string
+    Kontaktdaten:
+      required:
+      - kommunikationsArtCode
+      - kennung
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+          x-cca-property-hint: adrvID
+        kommunikationsArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/KommunikationsArtCode
+        kennung:
+          description: "Phonenumber, Emailaddress, URl, ..."
+          type: string
+          x-omds2-property: Kennung
+          x-cca-property-hint: telFullNumber
+    KontaktdatenCreateModel:
+      allOf:
+      - $ref: '#/components/schemas/Kontaktdaten'
+    KontaktdatenEditModel:
+      allOf:
+      - $ref: '#/components/schemas/Kontaktdaten'
+      - type: object
+      - properties:
+          id:
+            format: int32
+            description: Id of the item to be edited. If left null or 0 the item will
+              be created.
+            type: integer
+            x-cca-property-hint: adrvID
+    KontaktdatenViewModel:
+      allOf:
+      - $ref: '#/components/schemas/Kontaktdaten'
+      - type: object
+      - properties:
+          id:
+            format: int32
+            description: Id of the item.
+            type: integer
+            x-cca-property-hint: adrvID
+    PersonCreateModel:
+      description: Createmodel for Person
+      required:
+      - personenNummer
+      - personenArtCode
+      type: object
+      properties:
+        istKunde:
+          type: boolean
+          x-cca-extension: true
+          x-cca-property-hint: perKundeSeit
+        betreuerId:
+          format: int32
+          description: The persons administrator at the insurance office.
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: perBetreuerId
+        personenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/PersonenArtCode
+        natuerlichePerson:
+          $ref: '#/components/schemas/NatuerlichePersonModel'
+        sonstigePerson:
+          $ref: '#/components/schemas/SonstigePersonModel'
+        kontaktdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/KontaktdatenCreateModel'
+        identifizierung:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identifizierung'
+    PersonEditModel:
+      description: EditModel for Person.
+      properties:
+        istKunde:
+          type: boolean
+          x-cca-extension: true
+          x-cca-property-hint: perKundeSeit
+        betreuerId:
+          format: int32
+          description: The persons administrator at the insurance office.
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: perBetreuerId
+        personenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/PersonenArtCode
+        natuerlichePerson:
+          $ref: '#/components/schemas/NatuerlichePersonModel'
+        sonstigePerson:
+          $ref: '#/components/schemas/SonstigePersonModel'
+        kontaktdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/KontaktdatenEditModel'
+        identifizierung:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identifizierung'
+    PersonViewModel:
+      description: Viewmodel for Person.
+      properties:
+        id:
+          format: int32
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: perId
+        istKunde:
+          type: boolean
+          x-cca-extension: true
+          x-cca-property-hint: perKundeSeit
+        betreuerId:
+          format: int32
+          description: The persons administrator at the insurance office.
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: perBetreuerId
+        personenNummer:
+          description: Personnumber of the Person.
+          type: string
+          x-cca-property-hint: perPersNr
+          x-omds2-property: PersonenNr
+        personenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/PersonenArtCode
+        natuerlichePerson:
+          $ref: '#/components/schemas/NatuerlichePersonModel'
+        sonstigePerson:
+          $ref: '#/components/schemas/SonstigePersonModel'
+        name:
+          description: The persons full name.
+          type: string
+          x-cca-property-hint: person.perName1 + person.perName2
+        kontaktdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/KontaktdatenViewModel'
+        hauptAdresse:
+          $ref: '#/components/schemas/AdresseViewModel'
+        identifizierung:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identifizierung'
+    PersonBeziehungsArtCode:
+      description: |
+        Type of the relationship. Must be one of the configured Beziehungsarten in `configuration/personBeziehungsarten`
+      type: string
+    PersonRisikoViewModel:
+      description: ViewModel for a PersonRisk
+      properties:
+        vertragSparteId:
+          format: int32
+          description: |
+            The id of the VertragSparte if the person risk is only related to a vertragsparte of a contract
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: vervVertragSparteID
+        gueltigAb:
+          format: date
+          description: "If set, this determines the date after which the relationship\
+            \ is valid\n"
+          type: string
+          x-cca-extension: true
+          x-cca-property-hint: vervGueltigAb
+        gueltigBis:
+          format: date
+          description: "If set, this determines the date after which the relationship\
+            \ is invalid\n"
+          type: string
+          x-cca-extension: true
+          x-cca-property-hint: vervGueltigAb
+        person:
+          $ref: '#/components/schemas/PersonViewModel'
+    KFZCommonProperties:
+      properties:
+        abs:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/EntscheidungJaNein
+          x-omds2-property: ABSKz
+          x-cca-property-hint: kfzABS
+        antriebsartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/AntriebsartCode
+        baujahr:
+          format: int16
+          type: integer
+          x-omds2-property: Modelljahr
+          x-cca-property-hint: kfzBaujahr
+        co2Ausstoss:
+          format: int16
+          type: integer
+          x-omds2-property: CO2_Ausstoss
+          x-cca-property-hint: kfzCO2
+        co2WltpWmtc:
+          format: int16
+          type: integer
+          x-omds2-property: CO2WltpWmtc
+          x-cca-property-hint: kfzCO2_WLTP
+        eigengewicht:
+          format: int16
+          type: integer
+          x-cca-property-hint: kfzGesamtGewicht
+        erstzulassungsDatum:
+          format: date
+          type: string
+          x-omds2-property: Erstzulassdat
+          x-cca-property-hint: kfzErstzulassung
+        fahrgestellNummer:
+          type: string
+          x-omds2-property: Fahrgestnr
+          x-cca-property-hint: kfzFahrgestNummer
+        fahrzeugArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/FahrzeugArtCode
+        handelsbezeichnung:
+          type: string
+          x-omds2-property: Handelsbez
+          x-cca-property-hint: kfzHandelsbez
+        hubraum:
+          format: int16
+          type: integer
+          x-omds2-property: Hubraum
+          x-cca-property-hint: kfzHubraum
+        istLeasingKfz:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/EntscheidungJaNein0
+          x-omds2-property: Leasingkz
+        katalysator:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/EntscheidungJaNein0
+          x-omds2-property: Katkz
+          x-cca-property-hint: kfzKatalysator
+        kennzeichen:
+          type: string
+          x-omds2-property: Pol_Kennz
+          x-cca-property-hint: kfzKennzeichen
+        kfzTyp:
+          description: Type/Modell of the KFZ
+          type: string
+          x-cca-property-hint: kfzTyp
+        leistung:
+          format: double
+          type: number
+          x-omds2-property: Leistung
+          x-cca-property-hint: kfzKilowatt
+        leistungElektroMotor:
+          format: int16
+          type: integer
+          x-omds2-property: LeistungElektroMot
+          x-cca-property-hint: kfzKilowatt_ElektroMot
+        marke:
+          description: Brandname. Must be one of the provided list of `/configuration/auswahllisten/kfzMarke`
+          type: string
+          x-omds2-property: Marke
+          x-cca-property-hint: KFZHersteller.khersText
+        motorNummer:
+          type: string
+          x-omds2-property: Motornr
+          x-cca-property-hint: kfzMotorNummer
+        natCode:
+          type: string
+          x-omds2-property: NatCode
+          x-cca-property-hint: kfzNatCode
+        nutzlast:
+          format: int16
+          type: integer
+          x-omds2-property: Nutzlast
+          x-cca-property-hint: kfzNutzlast
+        plaetze:
+          format: int8
+          type: integer
+          x-omds2-property: Plaetze
+          x-cca-property-hint: kfzSitzplaetzeMit
+        verwendungsZweckCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VerwendungsZweckCode
+    KFZCreateModel:
+      required:
+      - verwendungsZweckCode
+      - fahrzeugArtCode
+      allOf:
+      - $ref: '#/components/schemas/KFZCommonProperties'
+    KFZEditModel:
+      allOf:
+      - $ref: '#/components/schemas/KFZCommonProperties'
+    KFZViewModel:
+      allOf:
+      - $ref: '#/components/schemas/KFZCommonProperties'
+      - type: object
+        properties:
+          id:
+            format: int32
+            description: Id of the KFZn
+            type: integer
+          besitzerId:
+            format: int32
+            description: "Id of the Person owning the vehicle (if a vehicle has several\
+              \ owners, the person with the lowest relationID is picked)."
+            type: integer
+            x-cca-property-hint: Person.perId
+          besitzer:
+            description: The owners full name
+            type: string
+            x-cca-property-hint: Person.perName1 + Person.perName2
+          steuerbefreit:
+            type: string
+            x-cca-property-hint: KFZSteuerbefreit_T.kfzRisikentbText
+            x-cca-extension: true
+    SachrisikoCreateModel:
+      properties:
+        ausstattungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/AusstattungCode
+        bauartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/BauartCode
+        gebaeudeartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GebaeudeartCode
+        dachungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/DachungCode
+        gebaeudehoeheCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GebaeudehoeheCode
+        nutzungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/NutzungCode
+        versicherteSacheCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VersicherteSacheCode
+        adresseId:
+          description: The id of an *existing* address that should be associated with
+            this risk.
+          type: integer
+          x-cca-property-hint: adresse.adrID
+        gebaeudeBezeichnung:
+          type: string
+          x-omds2-property: GebaeudeBez
+          x-cca-property-hint: nkpBezeichnung
+        fdesCodeechen:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlaechenCreateModel'
+        objektdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjektdatenCreateModel'
+    SachrisikoEditModel:
+      properties:
+        ausstattungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/AusstattungCode
+        bauartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/BauartCode
+        gebaeudeartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GebaeudeartCode
+        dachungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/DachungCode
+        gebaeudehoeheCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GebaeudehoeheCode
+        nutzungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/NutzungCode
+        versicherteSacheCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VersicherteSacheCode
+        gebaeudeBezeichnung:
+          type: string
+          x-omds2-property: GebaeudeBez
+          x-cca-property-hint: nkpBezeichnung
+        flaechen:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlaechenEditModel'
+        objektdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjektdatenEditModel'
+    SachrisikoViewModel:
+      properties:
+        id:
+          format: int32
+          description: Id of the NKP.
+          type: integer
+        besitzerId:
+          format: int32
+          description: Id of the person owning the property.
+          type: integer
+          x-cca-property-hint: person.perId
+          x-cca-extension: true
+        ausstattungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/AusstattungCode
+        bauartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/BauartCode
+        gebaeudeartCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GebaeudeartCode
+        dachungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/DachungCode
+        gebaeudehoeheCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/GebaeudehoeheCode
+        nutzungCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/NutzungCode
+        versicherteSacheCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VersicherteSacheCode
+        adresse:
+          $ref: '#/components/schemas/AdresseViewModel'
+        gebaeudeBezeichnung:
+          type: string
+          x-omds2-property: GebaeudeBez
+          x-cca-property-hint: nkpBezeichnung
+        besitzer:
+          description: Full name of the properties owner.
+          type: string
+          x-cca-property-hint: person.perName1 + person.perName2
+          x-cca-extension: true
+        art:
+          description: Full Text of the Type of the Property.
+          type: string
+          x-cca-property-hint: nkpart_t.nkpaText
+          x-cca-extension: true
+        flaechen:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlaechenViewModel'
+        objektdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjektdatenViewModel'
+    FlaechenCreateModel:
+      required:
+      - flaechenArtCode
+      properties:
+        flaechenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/FlaechenArtCode
+        innenFlaeche:
+          format: double
+          description: See omds description.
+          type: number
+          x-ccaproperty-hint: nkpflInnenFlaeche
+          x-omds2-property: InnenFlaeche
+        verbauteFlaeche:
+          format: double
+          description: See omds description.
+          type: number
+          x-ccaproperty-hint: nkpflVerbauteFlaeche
+          x-omds2-property: VerbauteFlaeche
+        nummer:
+          description: "Bei gleichartigen `flaechenArtCode`, dient die Nummer als\
+            \ Unterscheidungsmerkmal (zB.: Geschoss).\n"
+          type: string
+          x-ccaproperty-hint: nkpflNummer
+          x-omds2-property: Nummer
+    FlaechenEditModel:
+      properties:
+        id:
+          format: int32
+          description: "Id of the property area to edit. If this is null or 0, the\
+            \ model is used to create a new Area."
+          type: integer
+          x-cca-property-hint: nkpflID
+        flaechenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/FlaechenArtCode
+        innenFlaeche:
+          format: double
+          description: See omds description.
+          type: number
+          x-ccaproperty-hint: nkpflInnenFlaeche
+          x-omds2-property: InnenFlaeche
+        verbauteFlaeche:
+          format: double
+          description: See omds description.
+          type: number
+          x-ccaproperty-hint: nkpflVerbauteFlaeche
+          x-omds2-property: VerbauteFlaeche
+        nummer:
+          description: See omds description.
+          type: string
+          x-ccaproperty-hint: nkpflNummer
+          x-omds2-property: Nummer
+    FlaechenViewModel:
+      required:
+      - flaechenArtCode
+      - id
+      properties:
+        id:
+          format: int32
+          description: Id of the property area.
+          type: integer
+          x-cca-property-hint: nkpflID
+        flaechenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/FlaechenArtCode
+        innenFlaeche:
+          format: double
+          description: See omds description.
+          type: number
+          x-ccaproperty-hint: nkpflInnenFlaeche
+          x-omds2-property: InnenFlaeche
+        verbauteFlaeche:
+          format: double
+          description: See omds description.
+          type: number
+          x-ccaproperty-hint: nkpflVerbauteFlaeche
+          x-omds2-property: VerbauteFlaeche
+        nummer:
+          description: See omds description.
+          type: string
+          x-ccaproperty-hint: nkpflNummer
+          x-omds2-property: Nummer
+    ObjektdatenCreateModel:
+      required:
+      - objektdatenArtCode
+      properties:
+        objektdatenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ObjektdatenArtCode
+        wert:
+          description: The data.
+          type: string
+          x-cca-property-hint: nkpodWert
+          x-omds2-property: Wert
+    ObjektdatenEditModel:
+      required:
+      - objektdatenArtCode
+      properties:
+        id:
+          format: int32
+          description: "Id of the property data. If this is null or 0, the model is\
+            \ used to create a new data entry."
+          type: integer
+          x-cca-property-hint: nkpodID
+        objektdatenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ObjektdatenArtCode
+        wert:
+          description: The data.
+          type: string
+          x-cca-property-hint: nkpodWert
+          x-omds2-property: Wert
+    ObjektdatenViewModel:
+      required:
+      - id
+      - objektdatenArtCode
+      properties:
+        id:
+          format: int32
+          description: Id of the property data.
+          type: integer
+          x-cca-property-hint: nkpodID
+        objektdatenArtCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ObjektdatenArtCode
+        wert:
+          description: The data.
+          type: string
+          x-cca-property-hint: nkpodWert
+          x-omds2-property: Wert
+    DokumentViewModel:
+      properties:
+        id:
+          format: int32
+          description: Id of the Dokument.
+          type: integer
+        anlageDatum:
+          format: date
+          description: Time of creation.
+          type: string
+          x-cca-property-hint: dokAnlageDatum
+        beschreibung:
+          description: The document description.
+          type: string
+          x-cca-property-hint: dokBeschreibung
+        betreff:
+          description: Subject of the document.
+          type: string
+          x-cca-property-hint: dokBetreff
+        personId:
+          format: int32
+          description: Id of the person associated with that dokument.
+          type: integer
+          x-cca-property-hint: dokPersonId
+        dateiname:
+          description: The filename (including fileextension).
+          type: string
+          x-cca-property-hint: dokbDateiname
+        dateierweiterung:
+          description: The fileextension without the separating '.' (dot).
+          type: string
+          x-cca-property-hint: "patindex('%.%',reverse(dokbDateiname))"
+        dokumentTyp:
+          description: Full Text of the CCA9 Type of the Document.
+          type: string
+          x-cca-property-hint: DokumentTyp_T.dtypText
+          x-cca-extension: true
+        dokumentTypCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/DokumentTypCode
+    DokumentEditModel:
+      properties:
+        beschreibung:
+          description: The document description.
+          type: string
+          x-cca-property-hint: dokBeschreibung
+        betreff:
+          description: Subject of the document.
+          type: string
+          x-cca-property-hint: dokBetreff
+    XmlData:
+      properties:
+        xml:
+          description: ""
+          type: string
+    VertragViewCreateExclusiveProperties:
+      required:
+      - vuNr
+      type: object
+      properties:
+        defaultKontoId:
+          format: int32
+          description: Standard-Vermittler-Konto
+          type: integer
+          x-cca-extension: true
+        vertragSparteCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VertragSparteCode
+        vuNiederlassungId:
+          format: int32
+          description: Id of insurances branch office.
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: verNiederlassungID
+        vuNr:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VuNr
+    VertragCreateModelsCommonProperties:
+      allOf:
+      - $ref: '#/components/schemas/VertragCommonProperties'
+      - $ref: '#/components/schemas/VertragViewCreateExclusiveProperties'
+      - type: object
+        properties:
+          produkte:
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragsSparteByProductCreateModel'
+          vertragSparten:
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragsSparteManualCreateModel'
+    VertragaenderungsgrundElement:
+      type: object
+      properties:
+        adresseId:
+          format: int32
+          description: Id des Änderungsgrundes
+          type: integer
+          x-cca-property-hint: aendgText
+        Description:
+          description: Beschreibung der Vertragänderung
+          type: string
+          x-cca-property-hint: aendgText
+    VertragCommonProperties:
+      required:
+      - hauptFaelligkeitTag
+      - hauptFaelligkeitMonat
+      - vertragBeginn
+      - vertragEnde
+      - waehrungsCode
+      - adresseId
+      type: object
+      properties:
+        adresseId:
+          format: int32
+          description: Id of the adresse.
+          type: integer
+          x-cca-property-hint: verAdressID
+        automatischeVerlaengerung:
+          description: Wird der Vertrag automatisch verlängert.
+          type: boolean
+          x-cca-property-hint: verAutomVerlaeng
+        bankverbindungId:
+          format: int32
+          description: Id of the BankConnection
+          type: integer
+        betreuerId:
+          format: int32
+          description: Id of the contracts administrator at the insurance-office.
+          type: integer
+          x-cca-property-hint: verBetreuerID
+        eingereicht:
+          format: date
+          description: Datum der Antragseinreichung.
+          type: string
+          x-cca-property-hint: verEingereicht
+        inkasso:
+          description: Betreibt der Makler selber das Inkasso für den Vertrag.
+          type: boolean
+          x-cca-extension: true
+          x-cca-property-hint: verInkasso
+        hauptFaelligkeitMonat:
+          format: int32
+          description: Month of the main premium settlement date.
+          type: integer
+          x-cca-property-hint: verHauptFaellMonat
+        hauptFaelligkeitTag:
+          format: int32
+          description: Day of the main premium settlement date.
+          type: integer
+          x-cca-property-hint: verHauptFaellTag
+        defaultKontoId:
+          format: int32
+          description: Standard-Vermittler-Konto
+          type: integer
+          x-cca-extension: true
+        info:
+          description: Information about the contract.
+          type: string
+          x-cca-property-hint: verInfo
+        kuendbarPer:
+          format: date
+          description: Datum ab dem der Vertrag kündbar ist.
+          type: string
+          x-cca-property-hint: verKuendbarPer
+        kuendigungFrist:
+          format: int16
+          description: Kündigungsfrist in Monaten.
+          type: integer
+          x-cca-property-hint: verKuendigungFrist
+        risiko1:
+          description: A label for a risk that is associated with that Vertrag.
+          type: string
+          x-cca-extension: true
+          x-cca-property-hint: verRisiko1
+        risiko2:
+          description: A label for a second risk that is associated with that contract.
+          type: string
+          x-cca-extension: true
+          x-cca-property-hint: verRisiko2
+        vertragBeginn:
+          format: date
+          description: Begin date.
+          type: string
+          x-cca-property-hint: verBeginn
+        vertragEnde:
+          format: date
+          description: Date of the contracts expiry.
+          type: string
+          x-cca-property-hint: verAblauf
+        vuNiederlassungId:
+          format: int32
+          description: Id of insurances branch office.
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: verNiederlassungID
+        waehrungsCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/WaehrungsCode
+          x-cca-property-hint: verWaehrungID
+        zahlungsRhythmusCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ZahlungsRhythmusCode
+        zahlungsWegCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ZahlungsWegCode
+        zahlungDauer:
+          format: int16
+          description: Auszahlungsdauer bei Er-Lebensverträgen in Monaten.
+          type: integer
+          x-cca-property-hint: verZahlungDauer
+          x-cca-extension: true
+    AntragCreateModel:
+      allOf:
+      - $ref: '#/components/schemas/VertragCreateModelsCommonProperties'
+      - type: object
+        properties:
+          antragNr:
+            description: "Proposal number Wenn die Antragsnummer nicht befüllt ist,\
+              \ wird sie durch das System automatisch vergeben."
+            type: string
+            x-cca-property-hint: verAntragNr
+          produkte:
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragsSparteByProductCreateModel'
+          vertragSparten:
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragsSparteManualCreateModel'
+          vermittlernummer:
+            description: Vu - Vermittler-Konto (Vermittlernummer)
+            type: string
+            x-cca-property-hint: ktoKontoNr
+    OffertCreateModel:
+      allOf:
+      - $ref: '#/components/schemas/VertragCreateModelsCommonProperties'
+      - required:
+        - offertNr
+        type: object
+        properties:
+          offertNr:
+            description: "Proposal number Wenn die Offernummer nicht befüllt ist,\
+              \ wird sie durch das System automatisch vergeben."
+            type: string
+            x-cca-property-hint: verAntragNr
+    VertragCreateModel:
+      allOf:
+      - $ref: '#/components/schemas/VertragCreateModelsCommonProperties'
+      - type: object
+        properties:
+          vertragNr:
+            description: Polizzennummer
+            type: string
+            x-cca-property-hint: verPolizzenNr
+          polizziert:
+            format: date
+            type: string
+            x-cca-property-hint: verPolizziert
+          vertragStatusCode:
+            $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VertragStatusCode
+          produkte:
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragsSparteByProductCreateModel'
+          vertragSparten:
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragsSparteManualCreateModel'
+          vermittlernummer:
+            description: Vu - Vermittler-Konto (Vermittlernummer)
+            type: string
+            x-cca-property-hint: ktoKontoNr
+    VertragViewModel:
+      type: object
+      properties:
+        id:
+          format: int32
+          description: Id des Vertrages.
+          type: integer
+        betreuerId:
+          format: int32
+          description: The persons administrator at the insurance office.
+          type: integer
+        vuNr:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VuNr
+        vertragNr:
+          description: Polizzennummer
+          type: string
+          x-cca-property-hint: verPolizzenNr
+        antragNr:
+          description: "Proposal number Wenn die Antragsnummer nicht befüllt ist,\
+            \ wird sie durch das System automatisch vergeben."
+          type: string
+          x-cca-property-hint: verAntragNr
+        versicherungsnehmer:
+          description: Name of the person.
+          type: string
+          x-cca-property-hint: Person.perName1 + Person.perName2
+        versicherungsnehmerId:
+          format: int32
+          description: Id for the person entry of the insurance holder.
+          type: integer
+          x-cca-property-hint: verVNID
+        polizziert:
+          format: date
+          type: string
+          x-cca-property-hint: verPolizziert
+        niederlassung:
+          type: string
+          x-cca-property-hint: verNiederlassung
+        vuNiederlassungId:
+          format: int32
+          description: Id of insurances branch office.
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: verNiederlassungID
+        vertragArt:
+          type: string
+          x-cca-property-hint: VertragArt_T.vartText
+        adresse:
+          $ref: '#/components/schemas/AdresseViewModel'
+        buchstatus:
+          enum:
+          - offen
+          - geschlossen
+          type: string
+          x-cca-extension: true
+        defaultKontoId:
+          format: int32
+          description: Standard-Vermittler-Konto
+          type: integer
+          x-cca-extension: true
+        vertragSparteCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VertragSparteCode
+        anlageDatum:
+          format: date
+          description: Date of the contracts creation.
+          type: string
+          x-cca-property-hint: verAnlageDatum
+        automatischeVerlaengerung:
+          description: Wird der Vertrag automatisch verlängert.
+          type: boolean
+          x-cca-property-hint: verAutomVerlaeng
+        bankverbindungId:
+          format: int32
+          description: Id of the BankConnection
+          type: integer
+        eingereicht:
+          format: date
+          description: Datum der Antragseinreichung.
+          type: string
+          x-cca-property-hint: verEingereicht
+        inkasso:
+          description: Betreibt der Makler selber das Inkasso für den Vertrag.
+          type: boolean
+          x-cca-extension: true
+          x-cca-property-hint: verInkasso
+        gueltigBeginn:
+          format: date
+          description: 'Date of the last contract modifications '
+          type: string
+          x-cca-property-hint: verAenderungDatum
+        hauptFaelligkeitMonat:
+          format: int32
+          description: Month of the main premium settlement date.
+          type: integer
+          x-cca-property-hint: verHauptFaellMonat
+        hauptFaelligkeitTag:
+          format: int32
+          description: Day of the main premium settlement date.
+          type: integer
+          x-cca-property-hint: verHauptFaellTag
+        info:
+          description: Information about the contract.
+          type: string
+          x-cca-property-hint: verInfo
+        kuendbarPer:
+          format: date
+          description: Datum ab dem der Vertrag kündbar ist.
+          type: string
+          x-cca-property-hint: verKuendbarPer
+        kuendigungFrist:
+          format: int16
+          description: Kündigungsfrist in Monaten.
+          type: integer
+          x-cca-property-hint: verKuendigungFrist
+        praemieBruttoVertrag:
+          format: double
+          description: The contracts gross premium per payment interval.
+          type: number
+          x-cca-property-hint: verFBP
+        praemieNettoVertrag:
+          format: double
+          description: The contracts annual net premium.
+          type: number
+          x-cca-property-hint: verJNP
+        risiko1:
+          description: A label for a risk that is associated with that Vertrag.
+          type: string
+          x-cca-extension: true
+          x-cca-property-hint: verRisiko1
+        risiko2:
+          description: A label for a second risk that is associated with that contract.
+          type: string
+          x-cca-extension: true
+          x-cca-property-hint: verRisiko2
+        vertragBeginn:
+          format: date
+          description: Begin date.
+          type: string
+          x-cca-property-hint: verBeginn
+        vertragEnde:
+          format: date
+          description: Date of the contracts expiry.
+          type: string
+          x-cca-property-hint: verAblauf
+        waehrungsCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/WaehrungsCode
+          x-cca-property-hint: verWaehrungID
+        zahlungsRhythmusCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ZahlungsRhythmusCode
+        zahlungsWegCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ZahlungsWegCode
+        zahlungDauer:
+          format: int16
+          description: Auszahlungsdauer bei Er-Lebensverträgen in Monaten.
+          type: integer
+          x-cca-property-hint: verZahlungDauer
+          x-cca-extension: true
+        vertragTyp:
+          $ref: '#/components/schemas/VertragTypesEnum'
+          x-cca-property-hint: verVertragTyp
+          x-cca-extension: true
+        vertragStatusCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VertragStatusCode
+        vermittlernummer:
+          description: Vu - Vermittler-Konto (Vermittlernummer)
+          type: string
+          x-cca-property-hint: Konto.ktoKontoNr
+    VertragEditModel:
+      allOf:
+      - $ref: '#/components/schemas/VertragCommonProperties'
+      - type: object
+        properties:
+          id:
+            format: int32
+            description: Id des Vertrages
+            type: integer
+            readOnly: true
+          vertragNr:
+            description: Polizzennummer
+            type: string
+            x-cca-property-hint: verPolizzenNr
+          antragNr:
+            description: "Proposal number Wenn die Antragsnummer nicht befüllt ist,\
+              \ wird sie durch das System automatisch vergeben."
+            type: string
+            x-cca-property-hint: verAntragNr
+          vertragStatusCode:
+            format: int32
+            description: code of the VertragStatus.
+            type: integer
+            x-cca-property-hint: verStatusCode
+          gueltigBeginn:
+            format: date
+            description: Date of the last contract modifications.
+            type: string
+            x-cca-property-hint: verAenderungDatum
+          polizziert:
+            format: date
+            type: string
+            x-cca-property-hint: verPolizziert
+          vermittlernummer:
+            description: Vu - Vermittler-Konto (Vermittlernummer).
+            type: string
+            x-cca-property-hint: Konto.ktoKontoNr
+    VertragBuchEditModel:
+      required:
+      - id
+      - buchstatus
+      properties:
+        id:
+          format: int32
+          description: Id of the vertrag.
+          type: integer
+          x-cca-property-hint: verID
+        buchstatus:
+          enum:
+          - offen
+          - geschlossen
+          type: string
+          x-cca-extension: true
+    LeistungszeileViewModel:
+      allOf:
+      - type: object
+        properties:
+          id:
+            format: int32
+            description: Id of the LZ.
+            type: integer
+            x-cca-property-hint: vsplID
+      - $ref: '#/components/schemas/LeistungszeileModel'
+    LeistungszeileModel:
+      required:
+      - id
+      properties:
+        bezeichnung:
+          description: Info about the LZ.
+          type: string
+          x-cca-property-hint: vsplBezeichnung
+        laufnummer:
+          format: int16
+          minimum: 1
+          type: integer
+          x-cca-property-hint: vsplLaufnummer
+        isActive:
+          type: boolean
+          x-cca-property-hint: vsplAktiv
+        leistungTyp:
+          enum:
+          - leistung
+          - zuschlag
+          type: string
+          x-cca-property-hint: vsplLeistungTypID
+        vsu:
+          type: number
+          x-cca-property-hint: vsplVSU
+        vsuBewertet:
+          type: number
+          x-cca-property-hint: vsplVSUBewertet
+        sumUpVsu:
+          type: boolean
+          x-cca-property-hint: vsplVSUaddieren
+        berechnungTyp:
+          enum:
+          - fixNetto
+          - fixBrutto
+          - vsuPercent
+          - vsuPermille
+          type: string
+          x-cca-property-hint: vsplBerechnungTypID
+        praemie:
+          type: number
+          x-cca-property-hint: vsplPraemie
+        rabatt:
+          description: Rabatt in Prozent auf die Prämie.
+          maximum: 100
+          minimum: 0
+          type: number
+          x-cca-property-hint: vsplRabattProz
+        selbstbehalt:
+          type: object
+          properties:
+            minimum:
+              format: currency
+              minimum: 0
+              type: number
+              x-cca-property-hint: vsplSbMinimum
+            maximum:
+              format: currency
+              type: number
+              x-cca-property-hint: vsplSbMaximum
+            prozent:
+              maximum: 100
+              minimum: 0
+              type: number
+              x-cca-property-hint: vsplSbProzent
+        info:
+          description: Information
+          type: string
+          x-cca-property-hint: vsplInfo
+        infoBuero:
+          description: Interne Information.
+          type: string
+          x-cca-property-hint: vsplInfoBuero
+    VertragSparteProduktModel:
+      type: object
+      properties:
+        beobachtungBis:
+          format: date
+          description: Beobachtungszeitraum für die aktuelle B/M Stufe bei KFZ-Haftpflicht
+            Sparten.
+          type: string
+          x-cca-property-hint: vspBeobachtungBis
+          x-cca-kfz-spezifisch: true
+        beobachtungVon:
+          format: date
+          description: Beobachtungszeitraum für die aktuelle B/M Stufe bei KFZ-Haftpflicht
+            Sparten.
+          type: string
+          x-cca-property-hint: vspBeobachtungVon
+          x-cca-kfz-spezifisch: true
+        bonusMalusProzent:
+          format: real
+          description: Bonus / Malus Stufe Multiplikator.
+          type: number
+          x-cca-property-hint: vspBMProzent
+        bonusMalusStufeIntern:
+          description: Rating of the insurance-holders driving history.
+          type: string
+          x-cca-property-hint: BonusMalusStufe.bmstStufeIntern
+          x-omds2-property: ElEinstufung EstArtCdType=T EstWert
+        feuersteuerProzent:
+          format: float
+          description: Feuerschutzsteuer in Prozent
+          default: 0
+          type: number
+          x-cca-property-hint: vspFeuerStProzent
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        indexArtId:
+          format: int16
+          description: "Indexierungsgrundlage (z.B.: VPI, Baukostenindex,...)"
+          type: integer
+          x-cca-property-hint: vspIndexArtID
+          x-cca-extension: true
+        info:
+          description: Information zur Sparte.
+          type: string
+          x-cca-property-hint: vspInfo
+        praemieBruttoSparte:
+          format: float
+          description: ""
+          type: number
+          x-cca-property-hint: vspJBP
+          x-omds2-property: PraemieBtoSp
+        praemieNettoSparte:
+          format: float
+          description: Yearly netto bonus.
+          type: number
+          x-cca-property-hint: vspJNP_BM
+          x-omds2-property: PraemieNtoSp
+        kfzRisiken:
+          description: List of KFZ-Risiks related to this Sparte.
+          type: array
+          items:
+            format: int32
+            type: integer
+        vermittlernummer:
+          description: Vu - Vermittler-Konto (Vermittlernummer)
+          type: string
+          x-cca-property-hint: vspKonto.KontoNr
+          x-omds2-property: Vermnr (bei Vertrag)
+        personenRisiken:
+          description: List of Person-Risiks related to this Sparte.
+          type: array
+          items:
+            format: int32
+            type: integer
+        jnpVsuBerechnungsArt:
+          description: "Beschreibt wie die Jnp und Versicherungssumme berechnet werden.\
+            \ Entweder werden die JNP und VSU aus den Leistungszeilen berechnet, oder\
+            \ explizit gesetzt (die Berechnung ist dann deaktiviert)."
+          enum:
+          - AusLeistungszeilen
+          - Deaktiviert
+          type: string
+          x-cca-property-hint: vspJNPVSUmanuell
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        sachRisiken:
+          description: List of NKP-Risiks related to this Sparte.
+          type: array
+          items:
+            format: int32
+            type: integer
+        provisionSchabloneId:
+          format: int32
+          description: CCA Provisionsschablone
+          type: integer
+          x-cca-property-hint: vspSchabloneID
+          x-cca-extension: true
+        spartenBeginn:
+          format: date
+          description: Begin date of the contract-class.
+          type: string
+          x-cca-property-hint: vspBeginn
+          x-omds2-property: SpartenBeg
+        spartenEnde:
+          format: date
+          description: Date of the classes expiry.
+          type: string
+          x-cca-property-hint: vspAblauf
+          x-omds2-property: Sparte.SpartenEnd
+        unterjaehrigkeitsZuschlagProzent:
+          format: float
+          description: UnterjaehrigkeitsZuschlag Prozent.
+          default: 0
+          type: number
+          x-cca-property-hint: vspUJZProzent
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        vbNummer:
+          description: Versicherungsbestätigung
+          type: string
+          x-cca-property-hint: vspVBNummer
+          x-cca-kfz-spezifisch: true
+        verbandZuweisung:
+          description: Gibt an ob eine KFZ-HP vom Verband zugewiesen wurde.
+          type: boolean
+          x-cca-property-hint: vspVerbandZuwg
+          x-cca-kfz-spezifisch: true
+        vermittlerObjektId:
+          format: int32
+          description: Vermittler-Objekt
+          type: integer
+          x-cca-property-hint: vspVermittlerObjektID
+          x-cca-extension: true
+          x-cca-vermittlerprovision: true
+        versicherungsSumme:
+          format: float
+          description: The insured amount.
+          type: number
+          x-cca-property-hint: vspVSU
+        versicherungsSteuerProzent:
+          format: float
+          description: "The applicable insurance tax, depending on the insurance class.\
+            \ A default is provided by cca if not set."
+          type: number
+          x-cca-property-hint: vspVersStProzent
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        vorsteuerProzent:
+          format: int16
+          description: Höhe der Vorsteuerabzugsberechtigung in Prozent
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: vspVorstProzent
+        wechselKennzeichen:
+          description: Kennzeichnet HP Verträge für WechselKennzeichen. Die Berechnung
+            der Prämien/Steuerberechung wird dann aufgrund der mit WechselKennzeichen
+            gekennzeichenten KFZ - Risiken durchgeführt.
+          type: boolean
+          x-cca-property-hint: vspWechselKZ
+          x-cca-kfz-spezifisch: true
+          x-cca-sparten-berechnung: true
+    VertragsparteModel:
+      allOf:
+      - $ref: '#/components/schemas/VertragSparteProduktModel'
+      - type: object
+        properties:
+          spartenText:
+            description: The insurance classes name.
+            type: string
+            x-cca-property-hint: vspBezeichnung
+            x-omds2-property: Sparte.Spartentxt
+          spartenCode:
+            $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/SpartenCode
+            x-cca-property-hint: vwcSparteBez.spMDSCode
+          statusCode:
+            description: the contracts status code. default value is "1" (active)
+            type: string
+            x-omds2-property: StatusCd_Type
+          tarif:
+            description: Tarfibezeichnung lt. Versicherer.
+            type: string
+            x-cca-property-hint: vspTarif
+            x-omds2-property: HauptTarifBez
+          variante:
+            description: Tarfivariante lt Versicherer - zb. "mit Leihwagenverzicht"
+              bei KFZ-Haftpflicht.
+            type: string
+            x-cca-property-hint: vspVariante
+          versicherungsSteuer2BerechnungsArt:
+            description: 'Beschreibt wie die Motorenbezogene Versicherungssteuer berechnet
+              wird. Entweder wird die Steuer aus den KFZ-Risiken berechnet. '
+            enum:
+            - AusKfzRisiken
+            - Deaktiviert
+            type: string
+            x-cca-property-hint: vspVersSt2manuell
+            x-cca-extension: true
+            x-cca-sparten-berechnung: true
+            x-cca-kfz-spezifisch: true
+          versicherungsSteuer2:
+            format: float
+            description: "The second applicable insurance tax, depending on the insurance\
+              \ class. (i.e. Motorbezogene Versicherungssteuer)."
+            type: number
+            x-cca-property-hint: vspVersSteuer2
+            x-cca-kfz-spezifisch: true
+    VertragsSparteByProductCreateModel:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          productId:
+            format: int32
+            description: Id of stored schema
+            type: integer
+      - $ref: '#/components/schemas/VertragSparteProduktModel'
+        required:
+        - productId
+    VertragsSparteManualCreateModel:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/VertragsparteModel'
+      - required:
+        - spartenText
+        - versicherungsSumme
+        - praemieNettoSparte
+        - unterjaehrigkeitsZuschlagProzent
+        - feuersteuerProzent
+        - versicherungsSteuerProzent
+        type: object
+    VertragSparteViewModel:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/VertragsparteModel'
+      - type: object
+        properties:
+          statusCode:
+            description: if the status code of the contract is not one of the specified
+              valid omds status codes the returned value is null
+            type: string
+            x-omds2-property: StatusCd_Type
+          id:
+            format: int32
+            description: Id of the vsp.
+            type: integer
+            x-cca-property-hint: vspID
+          kfzRisiken:
+            description: Ids der `KFZ` die direkt zu dieser Sparte verknüpft sind.
+            type: array
+            items:
+              type: integer
+          personenRisiken:
+            description: Ids der `Person` - Risiken die direkt zu dieser Sparte verknüpft
+              sind.
+            type: array
+            items:
+              type: integer
+          sachRisiken:
+            description: Ids der `Sachrisiko` die direkt zu dieser Sparte verknüpft
+              sind.
+            type: array
+            items:
+              type: integer
+          indexArt:
+            description: Text of the indexArt.
+            type: string
+            x-cca-property-hint: IndexArt_T.idxaText
+    VertragSparteCreateModel:
+      properties:
+        produkte:
+          type: array
+          items:
+            $ref: '#/components/schemas/VertragsSparteByProductCreateModel'
+        vertragsparten:
+          type: array
+          items:
+            $ref: '#/components/schemas/VertragsSparteManualCreateModel'
+    VertragSparteEditModel:
+      properties:
+        beobachtungBis:
+          format: date
+          description: Beobachtungszeitraum für die aktuelle B/M Stufe bei KFZ-Haftpflicht
+            Sparten.
+          type: string
+          x-cca-property-hint: vspBeobachtungBis
+          x-cca-kfz-spezifisch: true
+        beobachtungVon:
+          format: date
+          description: Beobachtungszeitraum für die aktuelle B/M Stufe bei KFZ-Haftpflicht
+            Sparten.
+          type: string
+          x-cca-property-hint: vspBeobachtungVon
+          x-cca-kfz-spezifisch: true
+        bonusMalusProzent:
+          format: float
+          description: Bonus / Malus Stufe Multiplikator.
+          type: number
+          x-cca-property-hint: vspBMProzent
+        bonusMalusStufeIntern:
+          description: Rating of the insurance-holders driving history.
+          type: string
+          x-cca-property-hint: BonusMalusStufe.bmstStufeIntern
+          x-omds2-property: ElEinstufung EstArtCdType=T EstWert
+        feuersteuerProzent:
+          format: float
+          description: Feuerschutzsteuer in Prozent
+          default: 0
+          type: number
+          x-cca-property-hint: vspFeuerStProzent
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        info:
+          description: Information zur Sparte.
+          type: string
+          x-cca-property-hint: vspInfo
+        praemieBruttoSparte:
+          format: float
+          description: ""
+          type: number
+          x-cca-property-hint: vspJBP
+          x-omds2-property: PraemieBtoSp
+        praemieNettoSparte:
+          format: float
+          description: Yearly netto bonus.
+          type: number
+          x-cca-property-hint: vspJNP_BM
+          x-omds2-property: PraemieNtoSp
+        jnpVsuBerechnungsArt:
+          description: "Beschreibt wie die Jnp und Versicherungssumme berechnet werden.\
+            \ Entweder werden die JNP und VSU aus den Leistungszeilen berechnet, oder\
+            \ explizit gesetzt (die Berechnung ist dann deaktiviert)."
+          enum:
+          - AusLeistungszeilen
+          - Deaktiviert
+          type: string
+          x-cca-property-hint: vspJNPVSUmanuell
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        spartenBeginn:
+          format: date
+          description: Begin date of the contract-class.
+          type: string
+          x-cca-property-hint: vspBeginn
+          x-omds2-property: SpartenBeg
+        spartenEnde:
+          format: date
+          description: Date of the classes expiry.
+          type: string
+          x-cca-property-hint: vspAblauf
+          x-omds2-property: Sparte.SpartenEnd
+        unterjaehrigkeitsZuschlagProzent:
+          format: float
+          description: UnterjaehrigkeitsZuschlag Prozent.
+          default: 0
+          type: number
+          x-cca-property-hint: vspUJZProzent
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        vbNummer:
+          description: Versicherungsbestätigung
+          type: string
+          x-cca-property-hint: vspVBNummer
+          x-cca-kfz-spezifisch: true
+        verbandZuweisung:
+          description: Gibt an ob eine KFZ-HP vom Verband zugewiesen wurde.
+          type: boolean
+          x-cca-property-hint: vspVerbandZuwg
+          x-cca-kfz-spezifisch: true
+        versicherungsSumme:
+          format: float
+          description: The insured amount.
+          type: number
+          x-cca-property-hint: vspVSU
+        versicherungsSteuerProzent:
+          format: float
+          description: "The applicable insurance tax, depending on the insurance class.\
+            \ A default is provided by cca if not set."
+          type: number
+          x-cca-property-hint: vspVersStProzent
+          x-cca-extension: true
+          x-cca-sparten-berechnung: true
+        vorsteuerProzent:
+          format: int16
+          description: Höhe der Vorsteuerabzugsberechtigung in Prozent
+          type: integer
+          x-cca-extension: true
+          x-cca-property-hint: vspVorstProzent
+        wechselKennzeichen:
+          description: Kennzeichnet HP Verträge für WechselKennzeichen. Die Berechnung
+            der Prämien/Steuerberechung wird dann aufgrund der mit WechselKennzeichen
+            gekennzeichenten KFZ - Risiken durchgeführt.
+          type: boolean
+          x-cca-property-hint: vspWechselKZ
+          x-cca-kfz-spezifisch: true
+          x-cca-sparten-berechnung: true
+        statusCode:
+          format: int16
+          description: the contracts status code. default value is 1 (active)
+          type: integer
+          x-cca-property-hint: vspStatusID
+          x-omds2-property: StatusCd_Type
+    ZusatzdatenModel:
+      properties:
+        alias:
+          description: The datafields alias.
+          type: string
+        datenTyp:
+          description: |
+            The datafields datatype + Text - free text (linebreaks are ignored!) + Datum - Date + Ganzzahl - integer + Gleitzahl - number / double + Enum - fixed enumeration of possible string values + JaNein - boolean value
+          enum:
+          - Text
+          - Datum
+          - Ganzzahl
+          - Gleitzahl
+          - Enum
+          - JaNein
+          type: string
+        rawValue:
+          description: "The values string representation if set or null.\n  * Text\
+            \ - the text \n  * Datum - The ISO 8601 formated datetime\n  * Ganzzahl\
+            \ - Integer digits with optional negative sign (i.e. \"1234\", \"-1234\"\
+            )\n  * Gleitzahl - Integral and decimal digits with optional negative\
+            \ sign. Decimal-separator: \".\"\n  * Enum - the enum identifier as string\n\
+            \  * JaNein - (\"false\"|\"true\")\"\n  \n"
+          type: string
+        stringValue:
+          description: "The string value is set for the types [Text,Enum]."
+          type: string
+        dateValue:
+          format: datetime
+          description: "The date value is set for [Datum]."
+          type: string
+        integerValue:
+          format: int32
+          description: "The integer value is set for [Ganzzahl]."
+          type: integer
+        doubleValue:
+          format: double
+          description: "The doubleValue is set for [Gleitzahl]."
+          type: number
+        booleanValue:
+          description: "The booleanValue is set for [JaNein]."
+          type: boolean
+    SearchRequestModel:
+      properties:
+        searchTerm:
+          description: Fulltext Search term. Words shorter than 3 characters will
+            be ignored.
+          type: string
+        searchMode:
+          format: enum - Tier1 - Tier2
+          description: "CCAOnline supports two searchmodes.\n  * Tier 1: is a fast\
+            \ search mode, that only includes properties directly associated with\
+            \ the enitity (like name, info, ...)- This is only supported for Person,\
+            \ Vertrag, Schaden\n  * Tier 2: provides extensive search results.\n"
+          type: string
+        entityFilter:
+          description: "List of entity types that should be included in the search\
+            \ result.  Attention: Tier1 Search only support Person, Vertrag and Schaden.\
+            \ All other entities will be ignored in tier1 Mode.\n"
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityTypesEnum'
+        filterFiliale:
+          description: "If Filialen are configured this option can be used to only\
+            \ return items, that are administered by the users filiale.\n"
+          type: boolean
+    SearchResponseModel:
+      properties:
+        entityType:
+          $ref: '#/components/schemas/EntityTypesEnum'
+        entityId:
+          format: int32
+          description: The identifier of entity.
+          type: integer
+    EntityTypesEnum:
+      enum:
+      - Person
+      - Vertrag
+      - Schaden
+      - Dokument
+      - Risiko
+      - Wiedervorlage
+      - Kontakt
+      - Finanziell
+      type: string
+    SignatureProcessStateEnum:
+      enum:
+      - Deferred
+      - InProgress
+      - Finished
+      - Canceled
+      - Error
+      - PartiallySigned
+      - NotFound
+      type: string
+    VertragTypesEnum:
+      description: "Type of the Contract (offer, proposal or contract)"
+      enum:
+      - Contract
+      - Proposal
+      - Offer
+      type: string
+    AuswahllistenModel:
+      required:
+      - ccaTabelle
+      properties:
+        ccaTabelle:
+          description: The cca table that relates to the selectionlist.
+          type: string
+        mappings:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                format: int32
+                description: The CCA Id of the selectionlist item.
+                type: integer
+              text:
+                description: The label for the selectionlist item (localized).
+                type: string
+    OmdsMappingModel:
+      properties:
+        omdsSchluesselArt:
+          description: The OMDS Key Type.
+          type: string
+        mappings:
+          type: array
+          items:
+            type: object
+            properties:
+              omdsCode:
+                description: The omds code.
+                type: string
+              omdsBezeichnung:
+                description: The label of the omds code.
+                type: string
+              id:
+                format: int32
+                description: The cca id of that item.
+                type: integer
+              text:
+                description: The cca label for that item (localized).
+                type: string
+    Error:
+      required:
+      - status
+      - type
+      type: object
+      properties:
+        correlationId:
+          description: A for the request unique ID.
+          type: string
+        detail:
+          description: A for the user detailed readable error message.
+          type: string
+        instance:
+          description: The ressource where the error occurred.
+          type: string
+        status:
+          format: int32
+          description: HTTP Status Code
+          type: integer
+        title:
+          description: A for the user summarized readable error message.
+          type: string
+        type:
+          description: A URI which describes the Problemtype.
+          type: string
+    PageModel:
+      type: object
+      properties:
+        first:
+          description: URl to the first page of results.
+          type: string
+        last:
+          description: URl to the last page of results
+          type: string
+        next:
+          description: URl to the immediate next page of results. If empty the current
+            page is the last page of results.
+          type: string
+        pageNumber:
+          description: Current page number.
+          type: integer
+        pageSize:
+          description: Max. number of items returned by a page.
+          type: integer
+        prev:
+          description: URl to the immediate previous page of results. If empty the
+            current page is the first page of results.
+          type: string
+        totalCount:
+          format: int32
+          description: Total number of items in the list.
+          type: integer
+    DokumentUnterschreibenStatusResult:
+      allOf:
+      - $ref: '#/components/schemas/SignatureProcessStateEnum'
+      - type: object
+    AdresseResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/AdresseViewModel'
+    PersonBeziehungResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonBeziehung'
+    BankkontoResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/BankkontoViewModel'
+    DokumentResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/DokumentViewModel'
+    PersonResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonViewModel'
+    PersonRisikoResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonRisikoViewModel'
+    KFZResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/KFZViewModel'
+    KFZRisikoResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              type: object
+              properties:
+                kfz:
+                  $ref: '#/components/schemas/KFZViewModel'
+                gueltigBis:
+                  format: date
+                  type: string
+                gueltigAb:
+                  format: date
+                  type: string
+                vertragSparteId:
+                  type: integer
+    SachrisikoResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/SachrisikoViewModel'
+    SachRisikoResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              type: object
+              properties:
+                nkp:
+                  $ref: '#/components/schemas/SachrisikoViewModel'
+                gueltigBis:
+                  format: date
+                  type: string
+                gueltigAb:
+                  format: date
+                  type: string
+                vertragSparteId:
+                  type: integer
+    VertragResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragViewModel'
+    VertragSparteResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/VertragSparteViewModel'
+    LeistungszeileResultPage:
+      allOf:
+      - $ref: '#/components/schemas/PageModel'
+      - type: object
+        properties:
+          data:
+            description: Ressource data
+            type: array
+            items:
+              $ref: '#/components/schemas/LeistungszeileViewModel'
+    ExistingRiskObject:
+      required:
+      - Id
+      properties:
+        id:
+          format: int32
+          description: The Id of the risk
+          type: integer
+    OfferToApplicationModel:
+      required:
+      - offerId
+      properties:
+        offerId:
+          format: int32
+          type: integer
+        vuNr:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/VuNr
+        antragNr:
+          description: "Proposal number Wenn die Antragsnummer nicht befüllt ist,\
+            \ wird sie durch das System automatisch vergeben."
+          type: string
+          x-cca-property-hint: verAntragNr
+        eingereicht:
+          format: date
+          description: Datum der Antragseinreichung.
+          type: string
+          x-cca-property-hint: verEingereicht
+        vertragBeginn:
+          format: date
+          description: Begin date.
+          type: string
+          x-cca-property-hint: verBeginn
+        vertragEnde:
+          format: date
+          description: Date of the contracts expiry.
+          type: string
+          x-cca-property-hint: verAblauf
+        vermittlernummer:
+          description: Vu - Vermittler-Konto (Vermittlernummer)
+          type: string
+          x-cca-property-hint: ktoKontoNr
+        zahlungsRhythmusCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ZahlungsRhythmusCode
+        zahlungsWegCode:
+          $ref: https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/ZahlungsWegCode
+    OfferToApplicationResultModel:
+      properties:
+        antragNr:
+          description: The supplied or generated AntragNr.
+          type: string
+    EndkundenPortalLogin:
+      required:
+      - benutzername
+      - kennwort
+      properties:
+        benutzername:
+          type: string
+        kennwort:
+          type: string
+    NiederlassungViewModel:
+      properties:
+        niederlassungId:
+          format: int32
+          type: integer
+        niederlassung:
+          description: Name of the Niederlassung
+          type: string
+        vermittlernummern:
+          type: array
+          items:
+            description: Vermittlernummern linked to this Niederlassung
+            type: string
+  parameters:
+    pagingPerPageParam:
+      example: /somePagingList?perPage=50
+      name: perPage
+      description: Indicates how many results should be returned per resultset page.
+      schema:
+        format: int32
+        default: 15
+        maximum: 100
+        minimum: 1
+        type: integer
+      in: query
+      required: false
+    pagingPageNumberParam:
+      example: /somePagingList?page=4
+      name: page
+      description: "Requests a page specified by its page number. If the page requests\
+        \ it out of scope, the returned data-set will be empty."
+      schema:
+        format: int32
+        default: 1
+        minimum: 1
+        type: integer
+      in: query
+      required: false
+    orderByParam:
+      explode: true
+      example: /someOrderableList?orderBy=typeId-asc&orderBy=filename-desc
+      name: orderBy
+      description: "A string, in the form of: <name of property> \"-\" asc / desc\
+        \ - multiple orderBy parameters can be specified, and will be resolved in\
+        \ order of left to right."
+      schema:
+        type: array
+        items:
+          type: string
+      in: query
+      required: false
+    filterByPropertiesParam:
+      name: filter
+      description: A string to specify filters for the list
+      schema:
+        type: string
+      in: query
+      required: false
+  requestBodies:
+    KFZCreateModel:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/KFZCreateModel'
+      required: true
+    ExistingRiskObject:
+      content:
+        application/json+vnd.existingRiskObject:
+          schema:
+            $ref: '#/components/schemas/ExistingRiskObject'
+      required: true
+    createDokumentToPerson:
+      content:
+        multipart/form-data:
+          schema:
+            required:
+            - content
+            - dokumentTypCode
+            type: object
+            properties:
+              content:
+                format: binary
+                description: The files Content. The Filename must be passed in the
+                  contents Content-Disposition Header.
+                type: string
+              dokumentTypCode:
+                description: |
+                  See (https://api.swaggerhub.com/domains/TIS-CCA/omds-components/2.10#/definitions/DokumentTypCode)
+                type: string
+    SachrisikoCreateModel:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SachrisikoCreateModel'
+      required: true
+  securitySchemes:
+    apiCustomAuth:
+      flows:
+        password:
+          tokenUrl: https://ccaonline-test.ccaedv.at/CCAOnline-API-Demo/api/token
+      type: oauth2
+      description: CCAOnline custom grant flow
+    oauth2sql:
+      flows:
+        password:
+          tokenUrl: https://ccaonline-test.ccaedv.at/CCAOnline-API-Demo/coredataservice/api/token
+      type: oauth2
+      description: "This token endpoint allows to use the standard `resourceowner\
+        \ password credentials` flow to retrieve accesstokens for CCA users, that\
+        \ use SQL Authentication type.\n"
+security:
+- oauth2sql: []
+- apiCustomAuth: []
